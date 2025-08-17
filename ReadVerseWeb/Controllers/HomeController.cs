@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using ReadVerseWeb.Models;
+using ReadVerse.Models;
 
 namespace ReadVerseWeb.Controllers
 {

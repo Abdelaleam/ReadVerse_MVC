@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReadVerseWeb.Models;
+using ReadVerse.Models;
 
-namespace ReadVerseWeb.Data
+namespace ReadVerse.DataAccess.Data
 {
     public class AppDbContext:DbContext
     {

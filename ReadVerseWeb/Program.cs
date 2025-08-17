@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using ReadVerseWeb.Data;
+using ReadVerse.DataAccess.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

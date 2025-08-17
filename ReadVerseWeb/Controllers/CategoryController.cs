@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReadVerseWeb.Data;
-using ReadVerseWeb.Models;
+using ReadVerse.DataAccess.Data;
+using ReadVerse.Models;
+
 
 namespace ReadVerseWeb.Controllers
 {

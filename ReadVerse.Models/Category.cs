@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ReadVerseWeb.Models
+namespace ReadVerse.Models
 {
     public class Category
     {

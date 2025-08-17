@@ -1,4 +1,4 @@
-namespace ReadVerseWeb.Models
+namespace ReadVerse.Models
 {
     public class ErrorViewModel
     {
