@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReadVerse.DataAccess.Data;
+using ReadVerse.DataAccess.Repository.IRepository;
 using ReadVerse.Models;
 
 
-namespace ReadVerseWeb.Controllers
+namespace ReadVerseWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly AppDbContext _db;
-        public CategoryController(AppDbContext db)
+        private readonly IUintOfWork _unitOFWork;
+        public CategoryController(IUintOfWork unitOFWork )
         {
-            _db = db;   
+            _unitOFWork = unitOFWork;
         }
         public IActionResult Index()
         {
-            var objCategoryList = _db.Categories.ToList();
+            var objCategoryList = _unitOFWork.Category.GetAll().ToList();
 
             return View(objCategoryList);
         }
@@ -31,8 +33,8 @@ namespace ReadVerseWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
+                _unitOFWork.Category.Add(obj);
+                _unitOFWork.Save();
                 TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
@@ -44,7 +46,7 @@ namespace ReadVerseWeb.Controllers
             {
                 return NotFound();
             }
-            Category category=_db.Categories.Find(id);
+            Category category= _unitOFWork.Category.Get(u=>u.Id==id);
             if (category == null)
             {
                 return NotFound();
@@ -57,8 +59,8 @@ namespace ReadVerseWeb.Controllers
             
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _unitOFWork.Category.Update(obj);
+                _unitOFWork.Save();
                 TempData["success"] = "Category Updated successfully";
                 return RedirectToAction("Index");
             }
@@ -70,7 +72,7 @@ namespace ReadVerseWeb.Controllers
             {
                 return NotFound();
             }
-            Category category = _db.Categories.Find(id);
+            Category category = _unitOFWork.Category.Get(u => u.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -80,13 +82,13 @@ namespace ReadVerseWeb.Controllers
         [HttpPost,ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Category obj = _db.Categories.Find(id);
-            if (obj == null)
+            Category obj = _unitOFWork.Category.Get(u => u.Id == id);
+          if (obj == null)
             {
                 return NotFound();
             }
-            _db.Categories.Remove(obj);
-            _db.SaveChanges();
+            _unitOFWork.Category.Remove(obj);
+            _unitOFWork.Save();
             TempData["success"] = "Category deleted successfully";
            return RedirectToAction("Index");
         }
