@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ReadVerse.DataAccess.Repository.IRepository;
 using ReadVerse.Models;
 using ReadVerse.Utility;
 using System;
@@ -34,6 +35,7 @@ namespace ReadVerseWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUintOfWork _uintOfWork;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -41,7 +43,9 @@ namespace ReadVerseWeb.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUintOfWork uintOfWork
+            )
         {
             _roleManager= roleManager;
             _userManager = userManager;
@@ -50,6 +54,7 @@ namespace ReadVerseWeb.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _uintOfWork = uintOfWork;
         }
 
         /// <summary>
@@ -109,6 +114,8 @@ namespace ReadVerseWeb.Areas.Identity.Pages.Account
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
 
+            public int? CompanyId {  get; set; }
+            public IEnumerable<SelectListItem> CompanyList { get; set; }
 
         }
 
@@ -129,6 +136,11 @@ namespace ReadVerseWeb.Areas.Identity.Pages.Account
                 {
                     Text =i,
                     Value=i.ToString()
+                }),
+                CompanyList = _uintOfWork.Company.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
                 })
 
             };
@@ -146,6 +158,10 @@ namespace ReadVerseWeb.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                if (Input.Role == SD.Role_Company)
+                {
+                    user.CompanyId = Input.CompanyId;
+                }
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
