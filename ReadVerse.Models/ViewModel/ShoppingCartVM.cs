@@ -9,6 +9,6 @@ namespace ReadVerse.Models.ViewModel
     public class ShoppingCartVM
     {
         public IEnumerable<ShoppingCart> shoppingCartList { get; set; }
-        public double OrderTotal { get; set; }
+        public OrderHeader orderHeader { get; set; }
     }
 }

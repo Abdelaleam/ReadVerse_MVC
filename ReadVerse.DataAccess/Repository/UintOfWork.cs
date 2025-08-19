@@ -18,10 +18,16 @@ namespace ReadVerse.DataAccess.Repository
         public IShoppingCartRepository ShoppingCart {  get; private set; }
         public IApplicationUserRepository applicationUserRepository {  get; private set; }
 
+        public IOrderDetailRepository orderDetail {  get; private set; }
+
+        public IOrderHeaderRepository orderHeader { get; private set; }
+
         public UintOfWork(AppDbContext db)
         {
                 _db = db;
-            applicationUserRepository=new ApplicationUserRepository(_db);
+            orderDetail=new OrderDetailRepository(_db);
+            orderHeader=new OrderHeaderRepository(_db);
+            applicationUserRepository =new ApplicationUserRepository(_db);
             ShoppingCart=new ShoppingCartRepository(_db);
                 Category = new CategoryRepository(_db) ;
                 Product = new ProductRepository(_db) ;

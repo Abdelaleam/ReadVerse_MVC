@@ -14,6 +14,8 @@ namespace ReadVerse.DataAccess.Repository.IRepository
         ICompanyRepository Company { get; }
         IShoppingCartRepository ShoppingCart { get; }
         IApplicationUserRepository applicationUserRepository { get; }
+        IOrderDetailRepository orderDetail  { get; }
+        IOrderHeaderRepository orderHeader { get; }
         void Save();
     }
 }
