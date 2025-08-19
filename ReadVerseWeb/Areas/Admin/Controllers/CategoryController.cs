@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReadVerse.DataAccess.Data;
 using ReadVerse.DataAccess.Repository.IRepository;
 using ReadVerse.Models;
+using ReadVerse.Utility;
 
 
 namespace ReadVerseWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles =SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUintOfWork _unitOFWork;
