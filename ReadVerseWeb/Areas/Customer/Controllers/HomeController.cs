@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ReadVerse.DataAccess.Repository;
 using ReadVerse.DataAccess.Repository.IRepository;
 using ReadVerse.Models;
+using ReadVerse.Utility;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -24,6 +25,7 @@ namespace ReadVerseWeb.Areas.Customer.Controllers
             IEnumerable<Product> products = _uintOfWork.Product.GetAll(includeProperties:"Category");
             return View(products);
         }
+        [Authorize(Roles = SD.Role_Customer)]
         public IActionResult Details(int productId)
         {
             ShoppingCart cart = new()
@@ -36,7 +38,7 @@ namespace ReadVerseWeb.Areas.Customer.Controllers
             return View(cart);
         }
         [HttpPost]
-        [Authorize]
+        [Authorize()]
         public IActionResult Details(ShoppingCart shoppingCart)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;

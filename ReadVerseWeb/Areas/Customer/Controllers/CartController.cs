@@ -10,9 +10,10 @@ using System.Security.Claims;
 namespace ReadVerseWeb.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [Authorize]
+    [Authorize(Roles = SD.Role_Customer)]
     public class CartController : Controller
     {
+        //Dip
         private readonly IUintOfWork _unitOfWork;
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
@@ -70,6 +71,7 @@ namespace ReadVerseWeb.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             ShoppingCartVM.shoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product");
             ShoppingCartVM.orderHeader.OrderDate = System.DateTime.Now;
             ShoppingCartVM.orderHeader.ApplicationUserId = userId;

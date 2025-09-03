@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using ReadVerse.DataAccess.Data;
 using ReadVerse.DataAccess.Repository.IRepository;
 using ReadVerse.Models;
@@ -17,12 +18,25 @@ namespace ReadVerseWeb.Areas.Admin.Controllers
         {
             _unitOFWork = unitOFWork;
         }
-        public IActionResult Index()
+        //remote custom val
+        public IActionResult CheckUniqueName(string name)
         {
-            var objCategoryList = _unitOFWork.Category.GetAll().ToList();
-
-            return View(objCategoryList);
+            Category category = _unitOFWork.Category.Get(u=>u.Name==name);
+            if (name == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json(false);
+            }
         }
+                public IActionResult Index()
+                {
+                    var objCategoryList = _unitOFWork.Category.GetAll().ToList();
+
+                    return View(objCategoryList);
+                }
         public IActionResult Create()
         {
             return View();
