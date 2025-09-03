@@ -23,5 +23,32 @@ namespace ReadVerse.DataAccess.Repository
         {
             _db.orderHeaders.Update(orderHeader);
         }
+
+        public void UpdateStatus(int id, string orderStatus, string? paymentStatus = null)
+        {
+            var OrderFromDb = _db.orderHeaders.FirstOrDefault(u => u.Id == id);
+            if (OrderFromDb != null)
+            {
+                OrderFromDb.OrderStatus = orderStatus;
+                if (paymentStatus != null)
+                {
+                    OrderFromDb.PaymentStatus = paymentStatus;
+                }
+            }
+        }
+
+        public void UpdateStripePaymentId(int id, string sessionId, string paymentIntentId)
+        {
+            var OrderFromDb = _db.orderHeaders.FirstOrDefault(u => u.Id == id);
+            if (!string.IsNullOrEmpty(sessionId))
+            {
+                OrderFromDb.SessionId = sessionId;
+            }
+            if (!string.IsNullOrEmpty(paymentIntentId))
+            {
+                OrderFromDb.PaymentIntentId = paymentIntentId;
+                OrderFromDb.PaymentDate = DateTime.Now;
+            }
+        }
     }
 }

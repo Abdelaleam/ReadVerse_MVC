@@ -7,6 +7,7 @@ using ReadVerse.DataAccess.Data;
 using ReadVerse.DataAccess.Repository;
 using ReadVerse.DataAccess.Repository.IRepository;
 using ReadVerse.Utility;
+using Stripe;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options=>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 builder.Services.ConfigureApplicationCookie(options => {
     options.LoginPath = $"/Identity/Account/Login";
@@ -37,7 +38,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
